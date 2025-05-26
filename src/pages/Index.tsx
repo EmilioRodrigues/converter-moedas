@@ -1,8 +1,8 @@
 
-import CurrencyConverter from "@/components/CurrencyConverter";
+import Home from "./Home";
 
 const Index = () => {
-  return <CurrencyConverter />;
+  return <Home />;
 };
 
 export default Index;
