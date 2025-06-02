@@ -66,7 +66,7 @@ const Footer = () => {
                 <Mail className="h-4 w-4" />
                 <span>www.olliverdigital.com.br</span>
               </div>
-              
+
               <div className="flex items-center space-x-2">
                 <MapPin className="h-4 w-4" />
                 <span>Fortaleza, Brasil</span>
@@ -77,7 +77,7 @@ const Footer = () => {
 
         <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm mb-4 md:mb-0">
-            © 2025 Conversor de Moedas. Todos os direitos reservados.
+            © 2025 Conversor de Moedas. Todos os direitos reservados. Made for <a href="https://www.olliverdigital.com.br" target="_blank" rel="noopener noreferrer">Olliver Digital</a>
           </p>
           <div className="flex space-x-6">
             <Link to="/termos" className="text-gray-400 hover:text-white text-sm transition-colors">
