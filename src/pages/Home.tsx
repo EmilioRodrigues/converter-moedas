@@ -1,8 +1,8 @@
-
 import { Link } from "react-router-dom";
 import { ArrowRight, Globe, TrendingUp, Shield, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import BannerAd from "@/components/BannerAd";
 
 
 const Home = () => {
@@ -100,6 +100,13 @@ const Home = () => {
               Usar Conversor Gratuito <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>
+        </div>
+      </section>
+
+      {/* Banner Ad Section */}
+      <section className="py-8 bg-gray-50">
+        <div className="container mx-auto px-4 flex justify-center">
+          <BannerAd />
         </div>
       </section>
     </div>
