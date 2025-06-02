@@ -4,6 +4,7 @@ import { ArrowRight, Globe, TrendingUp, Shield, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
+
 const Home = () => {
   const features = [
     {
@@ -37,7 +38,7 @@ const Home = () => {
             Conversor de <span className="text-blue-600">Moedas</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            A ferramenta mais confiável para conversões de moedas com taxas atualizadas em tempo real. 
+            A ferramenta mais confiável para conversões de moedas com taxas atualizadas em tempo real.
             Rápido, preciso e fácil de usar.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
