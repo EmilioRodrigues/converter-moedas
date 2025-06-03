@@ -7,6 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 import { toast } from "sonner";
+import { 
+  sanitizeInput, 
+  validateEmail, 
+  validateName, 
+  validateSubject, 
+  validateMessage 
+} from "@/utils/inputSanitizer";
 
 const Contato = () => {
   const [formData, setFormData] = useState({
@@ -16,17 +23,89 @@ const Contato = () => {
     message: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const validateForm = () => {
+    const newErrors = {
+      name: "",
+      email: "",
+      subject: "",
+      message: ""
+    };
+
+    if (!validateName(formData.name)) {
+      newErrors.name = "Nome deve ter entre 2-100 caracteres e conter apenas letras";
+    }
+
+    if (!validateEmail(formData.email)) {
+      newErrors.email = "E-mail inválido";
+    }
+
+    if (!validateSubject(formData.subject)) {
+      newErrors.subject = "Assunto deve ter entre 3-200 caracteres";
+    }
+
+    if (!validateMessage(formData.message)) {
+      newErrors.message = "Mensagem deve ter entre 10-1000 caracteres";
+    }
+
+    setErrors(newErrors);
+    return Object.values(newErrors).every(error => error === "");
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Mensagem enviada com sucesso! Entraremos em contato em breve.");
-    setFormData({ name: "", email: "", subject: "", message: "" });
+    
+    if (!validateForm() || isSubmitting) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Sanitize all inputs
+      const sanitizedData = {
+        name: sanitizeInput(formData.name),
+        email: sanitizeInput(formData.email),
+        subject: sanitizeInput(formData.subject),
+        message: sanitizeInput(formData.message)
+      };
+
+      // Simulate form submission (in a real app, this would send to a secure backend)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      console.log("Sanitized form data:", sanitizedData);
+      toast.success("Mensagem enviada com sucesso! Entraremos em contato em breve.");
+      setFormData({ name: "", email: "", subject: "", message: "" });
+      setErrors({ name: "", email: "", subject: "", message: "" });
+    } catch (error) {
+      toast.error("Erro ao enviar mensagem. Tente novamente.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
+
+    // Clear error when user starts typing
+    if (errors[name as keyof typeof errors]) {
+      setErrors({
+        ...errors,
+        [name]: ""
+      });
+    }
   };
 
   return (
@@ -59,8 +138,12 @@ const Contato = () => {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="mt-1"
+                      maxLength={100}
+                      className={`mt-1 ${errors.name ? 'border-red-500' : ''}`}
                     />
+                    {errors.name && (
+                      <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+                    )}
                   </div>
 
                   <div>
@@ -72,8 +155,12 @@ const Contato = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="mt-1"
+                      maxLength={254}
+                      className={`mt-1 ${errors.email ? 'border-red-500' : ''}`}
                     />
+                    {errors.email && (
+                      <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                    )}
                   </div>
 
                   <div>
@@ -85,8 +172,12 @@ const Contato = () => {
                       value={formData.subject}
                       onChange={handleChange}
                       required
-                      className="mt-1"
+                      maxLength={200}
+                      className={`mt-1 ${errors.subject ? 'border-red-500' : ''}`}
                     />
+                    {errors.subject && (
+                      <p className="text-red-500 text-sm mt-1">{errors.subject}</p>
+                    )}
                   </div>
 
                   <div>
@@ -98,12 +189,20 @@ const Contato = () => {
                       onChange={handleChange}
                       required
                       rows={5}
-                      className="mt-1"
+                      maxLength={1000}
+                      className={`mt-1 ${errors.message ? 'border-red-500' : ''}`}
                     />
+                    {errors.message && (
+                      <p className="text-red-500 text-sm mt-1">{errors.message}</p>
+                    )}
                   </div>
 
-                  <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
-                    Enviar Mensagem
+                  <Button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                  >
+                    {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
                   </Button>
                 </form>
               </CardContent>
